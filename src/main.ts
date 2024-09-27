@@ -21,7 +21,7 @@ library.add(faMagnifyingGlass, faAngleDown, faTrashCan, faCirclePlus)
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const vFocus = {
-  mounted(el) {
+  mounted(el: any) {
     el.focus()
   }
 }
