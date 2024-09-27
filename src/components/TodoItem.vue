@@ -13,8 +13,9 @@ function handleChange(event: Event) {
   isLine.value = isChecked
 }
 
-function handleClick(todoItem: ITodoItem) {
+function handleDelete(todoItem: ITodoItem) {
   console.log('click edildi', todoItem)
+  todoStore.selectedTodo(todoItem)
 }
 </script>
 <template>
@@ -24,9 +25,13 @@ function handleClick(todoItem: ITodoItem) {
     >{{ todo.text }}
     <input type="checkbox" :checked="todo.status" @change="handleChange" />
     <span class="checkmark border border-purple_01"></span>
-    <button class="h-12 text-gray_01 absolute right-0" @click="handleClick(props.todo)">
+    <label
+      class="h-12 text-gray_01 absolute right-0 cursor-pointer"
+      for="delete_modal_checkbox"
+      @click="handleDelete(todo)"
+    >
       <font-awesome-icon :icon="['fas', 'trash-can']" />
-    </button>
+    </label>
   </label>
 </template>
 

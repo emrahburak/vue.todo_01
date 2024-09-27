@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useMagicKeys, whenever } from '@vueuse/core'
-import { useTodoStore } from '@/stores/todoStore'
-
+import { useTodoStore, type ITodoItem } from '@/stores/todoStore'
+import type { UnaryExpression } from 'typescript'
+const todoStore = useTodoStore()
 const { escape } = useMagicKeys()
 
 whenever(escape, () => {
@@ -12,47 +13,43 @@ whenever(escape, () => {
   }
 })
 
-const todo = ref<string>('')
 const isChecked = ref<boolean>(false)
-const todoStore = useTodoStore()
 
-function handleSubmit() {
+function handleDelete(todo: ITodoItem | undefined) {
   console.log('submit edildi')
-  todoStore.addTodo(todo.value)
-  todo.value = ''
-  isChecked.value = false
+  if (todo) {
+    todoStore.deleteTodoItem(todo)
+    isChecked.value = false
+  }
 }
 </script>
 <template>
-  <input type="checkbox" id="modal_checkbox" v-model="isChecked" class="hidden" />
+  <input type="checkbox" id="delete_modal_checkbox" v-model="isChecked" class="hidden" />
   <div class="container">
-    <label for="modal_checkbox" class="absolute top-0 left-0 w-full h-full cursor-pointer"></label>
-    <form @submit.prevent="handleSubmit" class="inner rounded-lg p-3 font-kanit flex flex-col">
-      <h1 class="text-center text-2xl uppercase font-semibold text-black mb-5">New Note</h1>
-      <input
-        v-focus
-        v-model="todo"
-        type="text"
-        class="outline-none focus:outline-none rounded-md w-full text-2xl p-2 border border-purple_01"
-      />
+    <label
+      for="delete_modal_checkbox"
+      class="absolute top-0 left-0 w-full h-full cursor-pointer"
+    ></label>
+    <div class="inner rounded-lg p-3 font-kanit flex flex-col">
+      <h1 class="text-center text-2xl uppercase font-semibold text-black mb-5">Are you sure?</h1>
+      <p class="text-2xl text-center">{{ todoStore.selectedTodoItem?.text }}</p>
       <div class="w-full flex flex-nowrap items-center justify-between mt-auto">
-        <label class="bg-purple_01 text-white rounded-md px-4 py-2" for="modal_checkbox"
+        <label class="bg-purple_01 text-white rounded-md px-4 py-2" for="delete_modal_checkbox"
           >Cancel</label
         >
-
         <button
-          type="submit"
+          type="button"
           class="bg-purple_01 text-white rounded-md px-4 py-2"
-          for="modal_checkbox"
+          @click="handleDelete(todoStore.selectedTodoItem)"
         >
-          Apply
+          Delete
         </button>
       </div>
-    </form>
+    </div>
   </div>
 </template>
 <style scoped>
-#modal_checkbox:checked + .container {
+#delete_modal_checkbox:checked + .container {
   visibility: visible;
   opacity: 0.9;
 }

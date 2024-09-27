@@ -10,4 +10,8 @@ const todoStore = useTodoStore()
       <todo-item :todo="todo" />
     </li>
   </ul>
+  <div v-else class="flex flex-col items-center justify-center mt-7 space-y-1">
+    <img src="/src/assets/empty.png" alt="toto list" />
+    <p>Empty..</p>
+  </div>
 </template>

@@ -5,9 +5,14 @@ import { ref } from 'vue'
 const todoStore = useTodoStore()
 const selectedtStatus = ref(todoStore.listStatus[0].id)
 
+todoStore.currentStatus = todoStore.listStatus[0].name
+
+console.log('Test: ', todoStore.currentStatus)
+
 watch(selectedtStatus, (newStatus) => {
   const statusObj = todoStore.listStatus.find((status) => status.id === newStatus)
   if (statusObj) {
+    todoStore.currentStatus = statusObj?.name
     todoStore.getTodoList(statusObj)
   }
 })

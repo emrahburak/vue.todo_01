@@ -20,8 +20,15 @@ library.add(faMagnifyingGlass, faAngleDown, faTrashCan, faCirclePlus)
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
+const vFocus = {
+  mounted(el) {
+    el.focus()
+  }
+}
+
 const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
+app.directive('focus', vFocus)
 
 app.use(createPinia())
 app.use(router)
